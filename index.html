@@ -23,38 +23,80 @@
 		<h1>RNH Tax Calculator</h1>
 	</div>
 	  
-	<form>
-		<label>Salary</label><input type="number" name="gross_wage" id="gross_wage"/>
-		<button>Calculate</button>
+	<form id="form_gross_wage">
+		<label>Salary</label> <input type="number" name="gross_wage" id="gross_wage"/>		
 	</form>
+	
+	<button class="btn btn-primary" onclick="submit()">Calculate</button>
 	
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Pay Summary</th>
-				<th>Yearly</th>				
-				<th>Monthly</th>
+				<th style="text-align: end;">Yearly</th>				
+				<th style="text-align: end;">Monthly</th>
 			<tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>Gross Pay</td>
-				<td>Gross Annual</td>
-				<td>Gross Monthly</td>
+				<td> Gross Pay</td>
+				<td id="cell_gross_wage_annual" style="text-align: end;">Gross Annual</td>
+				<td id="cell_gross_wage_monthly" style="text-align: end;">Gross Monthly</td>
 			</tr>
 			<tr>
-				<td>IRS</td>
-				<td>IRS Annual</td>
-				<td>IRS Monthly</td>
+				<td> IRS (grossAnnualWage*0.75*0.2)</td>
+				<td id="cell_irs_annual" style="text-align: end;">IRS Annual</td>
+				<td id="cell_irs_monthly" style="text-align: end;">IRS Monthly</td>
 			</tr>
 			<tr>
-				<td>Segurança Social</td>
-				<td>SS Annual</td>
-				<td>SS Monthly</td>
+				<td> Segurança Social<sup>1</sup> (grossAnnualWage*0.7*0.214*0.75)</td>
+				<td id="cell_ss_annual" style="text-align: end;">SS Annual</td>
+				<td id="cell_ss_monthly" style="text-align: end;">SS Monthly</td>
+			</tr>
+			<tr>
+				<td> Total Taxes</td>
+				<td id="cell_tax_annual" style="text-align: end;">Tax Annual</td>
+				<td id="cell_tax_monthly" style="text-align: end;">Tax Monthly</td>
+			</tr>
+			<tr>
+				<td> Net Pay</td>
+				<td id="cell_net_wage_annual" style="text-align: end;">Net Wage Annual</td>
+				<td id="cell_net_wage_monthly" style="text-align: end;">Net Wage Monthly</td>
 			</tr>
 		</tbody>		
 	</table>
 	</div> <!-- /container -->
+	
+	<script>
+	
+	function format(value) {
+		return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)	
+	}
+	
+	function submit() {	  	
+	  	var grossAnnualWage = document.getElementById("form_gross_wage").elements[0].value;
+	  	var grossMonthlyWage = grossAnnualWage / 12;
+		var ssAnnual = (grossAnnualWage*0.7)*0.214*0.75;
+		var ssMonthly = ssAnnual / 12;
+		var irsAnnual = (grossAnnualWage)*0.75*0.2
+		var irsMonthly = irsAnnual / 12;
+		var taxAnnual = irsAnnual + ssAnnual;
+		var taxMonthly = irsMonthly + ssMonthly;
+		var netWageAnnual = grossAnnualWage - ssAnnual - irsAnnual;
+		var netWageMonthly = netWageAnnual / 12;
+
+	  	document.getElementById('cell_gross_wage_annual').innerHTML=format(grossAnnualWage);
+		document.getElementById('cell_gross_wage_monthly').innerHTML=format(grossMonthlyWage);
+		document.getElementById('cell_irs_annual').innerHTML=format(irsAnnual);
+		document.getElementById('cell_irs_monthly').innerHTML=format(irsMonthly);
+		document.getElementById('cell_ss_annual').innerHTML=format(ssAnnual);
+		document.getElementById('cell_ss_monthly').innerHTML=format(ssMonthly);
+		document.getElementById('cell_tax_annual').innerHTML=format(taxAnnual);
+		document.getElementById('cell_tax_monthly').innerHTML=format(taxMonthly);
+		document.getElementById('cell_net_wage_annual').innerHTML=format(netWageAnnual);
+		document.getElementById('cell_net_wage_monthly').innerHTML=format(netWageMonthly);
+	}
+	</script>
 	<!-- Bootstrap core JavaScript
 	================================================== -->
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
