@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<title>Bootstrap 101 Template</title>
+	<title>RNH Tax Calculator</title>
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
@@ -24,7 +24,7 @@
 	</div>
 	  
 	<form id="form_gross_wage">
-		<label>Salary</label> <input type="number" name="gross_wage" id="gross_wage"/>		
+		<label>Salary €</label> <input type="number" name="gross_wage" id="gross_wage" value="0"/>		
 	</form>
 	
 	<button class="btn btn-primary" onclick="submit()">Calculate</button>
@@ -40,28 +40,28 @@
 		<tbody>
 			<tr>
 				<td> Gross Pay</td>
-				<td id="cell_gross_wage_annual" style="text-align: end;">Gross Annual</td>
-				<td id="cell_gross_wage_monthly" style="text-align: end;">Gross Monthly</td>
+				<td id="cell_gross_wage_annual" style="text-align: end;">0 €</td>
+				<td id="cell_gross_wage_monthly" style="text-align: end;">0 €</td>
 			</tr>
 			<tr>
 				<td> IRS (grossAnnualWage*0.75*0.2)</td>
-				<td id="cell_irs_annual" style="text-align: end;">IRS Annual</td>
-				<td id="cell_irs_monthly" style="text-align: end;">IRS Monthly</td>
+				<td id="cell_irs_annual" style="text-align: end;">0 €</td>
+				<td id="cell_irs_monthly" style="text-align: end;">0 €</td>
 			</tr>
 			<tr>
 				<td> Segurança Social<sup>1</sup> (grossAnnualWage*0.7*0.214*0.75)</td>
-				<td id="cell_ss_annual" style="text-align: end;">SS Annual</td>
-				<td id="cell_ss_monthly" style="text-align: end;">SS Monthly</td>
+				<td id="cell_ss_annual" style="text-align: end;">0 €</td>
+				<td id="cell_ss_monthly" style="text-align: end;">0 €</td>
 			</tr>
 			<tr>
 				<td> Total Taxes</td>
-				<td id="cell_tax_annual" style="text-align: end;">Tax Annual</td>
-				<td id="cell_tax_monthly" style="text-align: end;">Tax Monthly</td>
+				<td id="cell_tax_annual" style="text-align: end;">0 €</td>
+				<td id="cell_tax_monthly" style="text-align: end;">0 €</td>
 			</tr>
 			<tr>
 				<td> Net Pay</td>
-				<td id="cell_net_wage_annual" style="text-align: end;">Net Wage Annual</td>
-				<td id="cell_net_wage_monthly" style="text-align: end;">Net Wage Monthly</td>
+				<td id="cell_net_wage_annual" style="text-align: end;">0 €</td>
+				<td id="cell_net_wage_monthly" style="text-align: end;">0 €</td>
 			</tr>
 		</tbody>		
 	</table>
