@@ -69,8 +69,9 @@
 	
 	<script>
 	
-	function format(value) {
-		return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)	
+	function fillCell(cellID, value) {
+		var formattedValue = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)	
+		document.getElementById(cellID).innerHTML=formattedValue
 	}
 	
 	function submit() {	  	
@@ -85,16 +86,16 @@
 		var netWageAnnual = grossAnnualWage - ssAnnual - irsAnnual;
 		var netWageMonthly = netWageAnnual / 12;
 
-	  	document.getElementById('cell_gross_wage_annual').innerHTML=format(grossAnnualWage);
-		document.getElementById('cell_gross_wage_monthly').innerHTML=format(grossMonthlyWage);
-		document.getElementById('cell_irs_annual').innerHTML=format(irsAnnual);
-		document.getElementById('cell_irs_monthly').innerHTML=format(irsMonthly);
-		document.getElementById('cell_ss_annual').innerHTML=format(ssAnnual);
-		document.getElementById('cell_ss_monthly').innerHTML=format(ssMonthly);
-		document.getElementById('cell_tax_annual').innerHTML=format(taxAnnual);
-		document.getElementById('cell_tax_monthly').innerHTML=format(taxMonthly);
-		document.getElementById('cell_net_wage_annual').innerHTML=format(netWageAnnual);
-		document.getElementById('cell_net_wage_monthly').innerHTML=format(netWageMonthly);
+	  	fillCell('cell_gross_wage_annual', grossAnnualWage);
+		fillCell('cell_gross_wage_monthly', grossMonthlyWage);
+		fillCell('cell_irs_annual', irsAnnual);
+		fillCell('cell_irs_monthly', irsMonthly);
+		fillCell('cell_ss_annual', ssAnnual);
+		fillCell('cell_ss_monthly', ssMonthly);
+		fillCell('cell_tax_annual', taxAnnual);
+		fillCell('cell_tax_monthly', taxMonthly);
+		fillCell('cell_net_wage_annual', netWageAnnual);
+		fillCell('cell_net_wage_monthly', netWageMonthly);
 	}
 	</script>
 	<!-- Bootstrap core JavaScript
