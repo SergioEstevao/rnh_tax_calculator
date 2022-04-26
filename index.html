@@ -23,11 +23,10 @@
 		<h1>RNH Tax Calculator</h1>
 	</div>
 	  
-	<form id="form_gross_wage">
-		<label>Salary €</label> <input type="number" name="gross_wage" id="gross_wage" value="0"/>		
-	</form>
-	
-	<button class="btn btn-primary" onclick="submit()">Calculate</button>
+	<form id="form_gross_wage" onsubmit="onSubmit(event);">
+		<label>Salary €</label> <input type="number" name="input_gross_wage" id="input_gross_wage" value="0"/>		
+		<input type="submit" class="btn btn-primary" value="Calculate"/>
+	</form>				
 	
 	<table class="table table-striped">
 		<thead>
@@ -67,15 +66,24 @@
 	</table>
 	</div> <!-- /container -->
 	
-	<script>
+	<script>	
+	
+	function onSubmit(e) {
+		if (e.preventDefault) { 
+			e.preventDefault();
+		}		
+		var formData = new FormData(e.target);
+		calculate(formData.get('input_gross_wage'));
+		return false;	
+	}
 	
 	function fillCell(cellID, value) {
 		var formattedValue = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)	
 		document.getElementById(cellID).innerHTML=formattedValue
 	}
 	
-	function submit() {	  	
-	  	var grossAnnualWage = document.getElementById("form_gross_wage").elements[0].value;
+	function calculate(value) {
+	  	var grossAnnualWage = value;
 	  	var grossMonthlyWage = grossAnnualWage / 12;
 		var ssAnnual = (grossAnnualWage*0.7)*0.214*0.75;
 		var ssMonthly = ssAnnual / 12;
