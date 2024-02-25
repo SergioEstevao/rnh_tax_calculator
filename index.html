@@ -24,6 +24,11 @@
 	</div>
 	  
 	<form id="form_gross_wage" onsubmit="onSubmit(event);">
+    <label>Year</label>
+		<select name="input_year_ias" class="form-select">
+  		<option value=480.43 >2023</option>
+  		<option value=443.20 >2022</option>  		
+		</select>
 		<label>Annual Salary €</label> <input type="number" name="input_gross_wage" id="input_gross_wage" value="0"/>		
 		<input type="submit" class="btn btn-primary" value="Calculate"/>
 	</form>				
@@ -84,7 +89,7 @@
 			e.preventDefault();
 		}		
 		var formData = new FormData(e.target);
-		calculate(formData.get('input_gross_wage'));
+		calculate(formData.get('input_gross_wage'), formData.get('input_year_ias'));
 		return false;	
 	}
 	
@@ -93,9 +98,9 @@
 		document.getElementById(cellID).innerHTML=formattedValue
 	}
 	
-	function calculate(value) {
-		var ias = 480.43
-	  var grossAnnualWage = value;
+	function calculate(sallary, year_ias) {
+		var ias = year_ias
+	  var grossAnnualWage = sallary;
 	  var grossMonthlyWage = grossAnnualWage / 12;
 	  var ssMonthly = Math.min((grossMonthlyWage*0.7*0.75), 12*ias)*0.214;
 		var ssAnnual = ssMonthly * 12;		
