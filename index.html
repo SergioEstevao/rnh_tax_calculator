@@ -1,135 +1,209 @@
 <!doctype html>
 <html lang="en">
-  <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<title>RNH Tax Calculator</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>RNH Tax Calculator</title>
 
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <!-- Bootstrap -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+            crossorigin="anonymous"
+        />
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-	  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-	  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-	<![endif]-->
-  </head>
-  <body>
-	<div class="container theme-showcase" role="main">  
-	<div class="page-header">
-		<h1>RNH Tax Calculator</h1>
-	</div>
-	  
-	<form id="form_gross_wage" onsubmit="onSubmit(event);">
-    <label>Year</label>
-		<select name="input_year_ias" class="form-select">
-		<option value=522.50 >2025</option>
-		<option value=509.26 >2024</option>
-  		<option value=480.43 >2023</option>
-  		<option value=443.20 >2022</option>  		
-		</select>
-		<label>Annual Salary €</label> <input type="number" name="input_gross_wage" id="input_gross_wage" value="0"/>		
-		<input type="submit" class="btn btn-primary" value="Calculate"/>
-	</form>				
-	
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Pay Summary</th>
-				<th style="text-align: end;">Yearly</th>				
-				<th style="text-align: end;">Monthly</th>
-			<tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td> Gross Pay</td>
-				<td id="cell_gross_wage_annual" style="text-align: end;">0 €</td>
-				<td id="cell_gross_wage_monthly" style="text-align: end;">0 €</td>
-			</tr>
-			<tr>
-				<td> IRS (grossAnnualWage*0.75*0.2)</td>
-				<td id="cell_irs_annual" style="text-align: end;">0 €</td>
-				<td id="cell_irs_monthly" style="text-align: end;">0 €</td>
-			</tr>
-			<tr>
-				<td> Segurança Social (grossAnnualWage*0.7*0.214*0.75) with a ceiling of (12xIAS*0.214)</td>
-				<td id="cell_ss_annual" style="text-align: end;">0 €</td>
-				<td id="cell_ss_monthly" style="text-align: end;">0 €</td>
-			</tr>
-			<tr>
-				<td> Total Taxes</td>
-				<td id="cell_tax_annual" style="text-align: end;">0 €</td>
-				<td id="cell_tax_monthly" style="text-align: end;">0 €</td>
-			</tr>
-			<tr>
-				<td> Net Pay</td>
-				<td id="cell_net_wage_annual" style="text-align: end;">0 €</td>
-				<td id="cell_net_wage_monthly" style="text-align: end;">0 €</td>
-			</tr>
-		</tbody>		
-	</table>
-	
-	<div class="well">
-		<p>This tax calculator assumes the following:</p>
-		<ul>
-			<li>You are tax resident in Portugal</li>
-			<li>You benefit of <a href="https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/Folhetos_informativos/Documents/Non_habitual_residents_Tax_regime.pdf" target="">the status RNH - "Residente Não Habitual"</a></li>
-			<li>You are registered at the Portuguese Tax Authority as an Independent Worker and are using the "Regime Simplificado"</li>
-			<li>All of your income is resulting of an high valued activity included in the list for RNH </li>
-			<li>You are selecting to pay the minimum amount possible of Social Security contributions</li>
-		</ul>
-	  </div>
-	</div> <!-- /container -->
-	
-	<script>	
-	
-	function onSubmit(e) {
-		if (e.preventDefault) { 
-			e.preventDefault();
-		}		
-		var formData = new FormData(e.target);
-		calculate(formData.get('input_gross_wage'), formData.get('input_year_ias'));
-		return false;	
-	}
-	
-	function fillCell(cellID, value) {
-		var formattedValue = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)	
-		document.getElementById(cellID).innerHTML=formattedValue
-	}
-	
-	function calculate(sallary, year_ias) {
-		var ias = year_ias
-	  var grossAnnualWage = sallary;
-	  var grossMonthlyWage = grossAnnualWage / 12;
-	  var ssMonthly = Math.min((grossMonthlyWage*0.7*0.75), 12*ias)*0.214;
-		var ssAnnual = ssMonthly * 12;		
-		var irsAnnual = (grossAnnualWage)*0.75*0.2
-		var irsMonthly = irsAnnual / 12;
-		var taxAnnual = irsAnnual + ssAnnual;
-		var taxMonthly = irsMonthly + ssMonthly;
-		var netWageAnnual = grossAnnualWage - ssAnnual - irsAnnual;
-		var netWageMonthly = netWageAnnual / 12;
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container theme-showcase" role="main">
+            <div class="page-header">
+                <h1>RNH Tax Calculator</h1>
+            </div>
 
-	  fillCell('cell_gross_wage_annual', grossAnnualWage);
-		fillCell('cell_gross_wage_monthly', grossMonthlyWage);
-		fillCell('cell_irs_annual', irsAnnual);
-		fillCell('cell_irs_monthly', irsMonthly);
-		fillCell('cell_ss_annual', ssAnnual);
-		fillCell('cell_ss_monthly', ssMonthly);
-		fillCell('cell_tax_annual', taxAnnual);
-		fillCell('cell_tax_monthly', taxMonthly);
-		fillCell('cell_net_wage_annual', netWageAnnual);
-		fillCell('cell_net_wage_monthly', netWageMonthly);
-	}
-	</script>
-	<!-- Bootstrap core JavaScript
+            <form id="form_gross_wage" onsubmit="onSubmit(event);">
+                <label>Year</label>
+                <select name="input_year_ias" class="form-select">
+                    <option value="537,13">2026</option>
+                    <option value="522.50">2025</option>
+                    <option value="509.26">2024</option>
+                    <option value="480.43">2023</option>
+                    <option value="443.20">2022</option>
+                </select>
+                <label>Annual Salary €</label>
+                <input
+                    type="number"
+                    name="input_gross_wage"
+                    id="input_gross_wage"
+                    value="0"
+                />
+                <input
+                    type="submit"
+                    class="btn btn-primary"
+                    value="Calculate"
+                />
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pay Summary</th>
+                        <th style="text-align: end">Yearly</th>
+                        <th style="text-align: end">Monthly</th>
+                    </tr>
+
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gross Pay</td>
+                        <td id="cell_gross_wage_annual" style="text-align: end">
+                            0 €
+                        </td>
+                        <td
+                            id="cell_gross_wage_monthly"
+                            style="text-align: end"
+                        >
+                            0 €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>IRS (grossAnnualWage*0.75*0.2)</td>
+                        <td id="cell_irs_annual" style="text-align: end">
+                            0 €
+                        </td>
+                        <td id="cell_irs_monthly" style="text-align: end">
+                            0 €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Segurança Social (grossAnnualWage*0.7*0.214*0.75)
+                            with a ceiling of (12xIAS*0.214)
+                        </td>
+                        <td id="cell_ss_annual" style="text-align: end">0 €</td>
+                        <td id="cell_ss_monthly" style="text-align: end">
+                            0 €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Taxes</td>
+                        <td id="cell_tax_annual" style="text-align: end">
+                            0 €
+                        </td>
+                        <td id="cell_tax_monthly" style="text-align: end">
+                            0 €
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Net Pay</td>
+                        <td id="cell_net_wage_annual" style="text-align: end">
+                            0 €
+                        </td>
+                        <td id="cell_net_wage_monthly" style="text-align: end">
+                            0 €
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="well">
+                <p>This tax calculator assumes the following:</p>
+                <ul>
+                    <li>You are tax resident in Portugal</li>
+                    <li>
+                        You benefit of
+                        <a
+                            href="https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/Folhetos_informativos/Documents/Non_habitual_residents_Tax_regime.pdf"
+                            target=""
+                            >the status RNH - "Residente Não Habitual"</a
+                        >
+                    </li>
+                    <li>
+                        You are registered at the Portuguese Tax Authority as an
+                        Independent Worker and are using the "Regime
+                        Simplificado"
+                    </li>
+                    <li>
+                        All of your income is resulting of an high valued
+                        activity included in the list for RNH
+                    </li>
+                    <li>
+                        You are selecting to pay the minimum amount possible of
+                        Social Security contributions
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /container -->
+
+        <script>
+            function onSubmit(e) {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+                var formData = new FormData(e.target);
+                calculate(
+                    formData.get("input_gross_wage"),
+                    formData.get("input_year_ias"),
+                );
+                return false;
+            }
+
+            function fillCell(cellID, value) {
+                var formattedValue = new Intl.NumberFormat("pt-PT", {
+                    style: "currency",
+                    currency: "EUR",
+                }).format(value);
+                document.getElementById(cellID).innerHTML = formattedValue;
+            }
+
+            function calculate(sallary, year_ias) {
+                var ias = year_ias;
+                var grossAnnualWage = sallary;
+                var grossMonthlyWage = grossAnnualWage / 12;
+                var ssMonthly =
+                    Math.min(grossMonthlyWage * 0.7 * 0.75, 12 * ias) * 0.214;
+                var ssAnnual = ssMonthly * 12;
+                var irsAnnual = grossAnnualWage * 0.75 * 0.2;
+                var irsMonthly = irsAnnual / 12;
+                var taxAnnual = irsAnnual + ssAnnual;
+                var taxMonthly = irsMonthly + ssMonthly;
+                var netWageAnnual = grossAnnualWage - ssAnnual - irsAnnual;
+                var netWageMonthly = netWageAnnual / 12;
+
+                fillCell("cell_gross_wage_annual", grossAnnualWage);
+                fillCell("cell_gross_wage_monthly", grossMonthlyWage);
+                fillCell("cell_irs_annual", irsAnnual);
+                fillCell("cell_irs_monthly", irsMonthly);
+                fillCell("cell_ss_annual", ssAnnual);
+                fillCell("cell_ss_monthly", ssMonthly);
+                fillCell("cell_tax_annual", taxAnnual);
+                fillCell("cell_tax_monthly", taxMonthly);
+                fillCell("cell_net_wage_annual", netWageAnnual);
+                fillCell("cell_net_wage_monthly", netWageMonthly);
+            }
+        </script>
+        <!-- Bootstrap core JavaScript
 	================================================== -->
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-  </body>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script
+            src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"
+        ></script>
+    </body>
 </html>
